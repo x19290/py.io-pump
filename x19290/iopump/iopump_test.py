@@ -17,8 +17,8 @@ class T0(TestCase):
                 iobj0, iobj1 = map(tuple, feed)
                 oobj0, oobj1 = io(), io()
                 IOPump(
-                    (True, w0, iobj0), (True, w1, iobj1),
-                    (False, r0, oobj0), (False, r1, oobj1),
+                    (w0, iobj0), (w1, iobj1),
+                    (r0, oobj0), (r1, oobj1),
                 ).join()
             finally:
                 close(r1)
