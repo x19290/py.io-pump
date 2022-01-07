@@ -1,0 +1,5 @@
+/.vscode/.*
+*.tmp
+*.0[ae]tmp
+.DS_Store
+__pycache__/

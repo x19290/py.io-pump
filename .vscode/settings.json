@@ -1,0 +1,20 @@
+{
+    "python.pythonPath": "python3",
+    "python.testing.unittestArgs": [
+        "--verbose",
+        "-p", "*_test.py"
+    ],
+    "python.testing.unittestEnabled": true,
+
+    "cSpell.words": [
+        "iobj",
+        "iobjs",
+        "iopump",
+        "isiobj",
+        "oobj",
+        "oobjs",
+        "rroutes",
+        "ttuple",
+        "wroutes",
+    ],
+}
