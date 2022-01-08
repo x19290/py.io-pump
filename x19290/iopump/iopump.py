@@ -11,27 +11,6 @@ class IOPump(ThreadTuple):
         from os import read
         from threading import Thread
 
-        def ispair(route):
-            try:
-                _, _ = route
-            except:
-                return False
-            else:
-                return True
-
-        def readable(fd):
-            try:
-                read(fd, 0)
-            except:
-                return False
-            else:
-                return True
-
-        handlers = tuple(y for y in routes if not ispair(y))
-        routes = tuple(y for y in routes if ispair(y))
-        wroutes = tuple((fd, iobj) for fd, iobj in routes if not readable(fd))
-        rroutes = tuple((fd, oobj) for fd, oobj in routes if readable(fd))
-
         def defaultreader(fd, oobj):
             from ..codecs.utf8 import utf8decode as adapt
             while True:
@@ -70,6 +49,16 @@ class IOPump(ThreadTuple):
                 write(fd, adapt(chunk))
             close(fd)
 
-        yield from (Thread(target=y) for y in handlers)
-        yield from (Thread(target=defaultreader, args=args) for args in rroutes)
-        yield from (Thread(target=defaultwriter, args=args) for args in wroutes)
+        for route in routes:
+            try:
+                fd, _ = route
+            except:
+                yield Thread(target=route)
+            else:
+                try:
+                    read(fd, 0)
+                except:
+                    target = defaultwriter
+                else:
+                    target = defaultreader
+                yield Thread(target=target, args=route)
