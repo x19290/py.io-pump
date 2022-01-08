@@ -7,21 +7,21 @@ def main():
 
 def iopump_demo(argv=None):
     r'''
-    To do the following doctest (>>> _main...), run:
+    To do the following doctest (>>> iopump_demo...), run:
     `python3 -m doctest iopump_demo.py`
 
     There should be no output.
 
-    >>> _main(r'<>'.split())
+    >>> iopump_demo(r'<>'.split())
     'abcd'
 
-    >>> _main(r'<> --bin-in'.split())
+    >>> iopump_demo(r'<> --bin-in'.split())
     'abcd'
 
-    >>> _main(r'<> --bin-out'.split())
+    >>> iopump_demo(r'<> --bin-out'.split())
     b'abcd'
 
-    >>> _main(r'<> --bin-out --bin-in'.split())
+    >>> iopump_demo(r'<> --bin-out --bin-in'.split())
     b'abcd'
     '''
 
