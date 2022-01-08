@@ -11,16 +11,16 @@ class IOPump(ThreadTuple):
         from os import read
         from threading import Thread
 
-        def writable(fd):
+        def readable(fd):
             try:
                 read(fd, 0)
             except:
-                return True
-            else:
                 return False
+            else:
+                return True
 
-        wroutes = tuple((fd, iobj) for fd, iobj in routes if writable(fd))
-        rroutes = tuple((fd, oobj) for fd, oobj in routes if not writable(fd))
+        wroutes = tuple((fd, iobj) for fd, iobj in routes if not readable(fd))
+        rroutes = tuple((fd, oobj) for fd, oobj in routes if readable(fd))
 
         def readpump(fd, oobj, adapt):
             while True:
