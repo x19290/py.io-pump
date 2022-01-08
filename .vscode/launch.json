@@ -5,12 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-           "name": "${file}.py",
+           "name": "iopump_demo.py",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "x19290/iopump/iopump_demo.py",
             "justMyCode": false,
             "console": "integratedTerminal"
         },
-    ]
+        {
+            "name": "${file}.py",
+             "type": "python",
+             "request": "launch",
+             "program": "${file}",
+             "justMyCode": false,
+             "console": "integratedTerminal"
+         },
+     ]
 }
