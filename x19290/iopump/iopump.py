@@ -70,6 +70,6 @@ class IOPump(ThreadTuple):
                 write(fd, adapt(chunk))
             close(fd)
 
+        yield from (Thread(target=y) for y in handlers)
         yield from (Thread(target=defaultreader, args=args) for args in rroutes)
         yield from (Thread(target=defaultwriter, args=args) for args in wroutes)
-        yield from (Thread(target=y) for y in handlers)
