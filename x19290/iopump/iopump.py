@@ -20,8 +20,7 @@ class IOPump(ThreadTuple):
                 try:
                     oobj.write(adapt(bits))
                 except TypeError:
-                    def adapt(b):
-                        return b
+                    from ..nop.identity import strictidentity as adapt
                     oobj.write(adapt(bits))
             while True:
                 bits = read(fd, DEFAULT_BUFFER_SIZE)
@@ -42,8 +41,7 @@ class IOPump(ThreadTuple):
                 try:
                     chunk = adapt(chunk)
                 except TypeError:
-                    def adapt(b):
-                        return b
+                    from ..nop.identity import strictidentity as adapt
                 write(fd, chunk)
             for chunk in iobj:
                 write(fd, adapt(chunk))
