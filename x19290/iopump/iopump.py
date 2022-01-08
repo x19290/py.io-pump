@@ -14,7 +14,7 @@ class IOPump(ThreadTuple):
         def ispair(route):
             try:
                 _, _ = route
-            except TypeError:
+            except:
                 return False
             else:
                 return True
@@ -32,14 +32,25 @@ class IOPump(ThreadTuple):
         wroutes = tuple((fd, iobj) for fd, iobj in routes if not readable(fd))
         rroutes = tuple((fd, oobj) for fd, oobj in routes if readable(fd))
 
-        def readpump(fd, oobj, adapt):
+        def reader(fd, oobj):
+            from ..codecs.utf8 import utf8decode as adapt
+            while True:
+                bits = read(fd, DEFAULT_BUFFER_SIZE)
+                if not bits:
+                    break
+                try:
+                    oobj.write(adapt(bits))
+                except TypeError:
+                    def adapt(b):
+                        return b
+                    oobj.write(adapt(bits))
             while True:
                 bits = read(fd, DEFAULT_BUFFER_SIZE)
                 if not bits:
                     break
                 oobj.write(adapt(bits))
 
-        def writepump(fd, iobj):
+        def writer(fd, iobj):
             from ..codecs.utf8 import utf8encode as adapt
             from os import close, write
 
@@ -59,21 +70,6 @@ class IOPump(ThreadTuple):
                 write(fd, adapt(chunk))
             close(fd)
 
-        if rroutes:
-            try:
-                rroutes[0][1].write(r'')
-            except TypeError:
-                def adapt(b):
-                    return b
-            else:
-                def adapt(b):
-                    from ..codecs.utf8 import utf8decode
-                    return utf8decode(b)
-            yield from (
-                Thread(target=readpump, args=args, kwargs=dict(adapt=adapt))
-                for args in rroutes
-            )
-
-        yield from (Thread(target=writepump, args=args) for args in wroutes)
-
+        yield from (Thread(target=reader, args=args) for args in rroutes)
+        yield from (Thread(target=writer, args=args) for args in wroutes)
         yield from (Thread(target=y) for y in handlers)
