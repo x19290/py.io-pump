@@ -32,7 +32,7 @@ class IOPump(ThreadTuple):
         wroutes = tuple((fd, iobj) for fd, iobj in routes if not readable(fd))
         rroutes = tuple((fd, oobj) for fd, oobj in routes if readable(fd))
 
-        def reader(fd, oobj):
+        def defaultreader(fd, oobj):
             from ..codecs.utf8 import utf8decode as adapt
             while True:
                 bits = read(fd, DEFAULT_BUFFER_SIZE)
@@ -50,7 +50,7 @@ class IOPump(ThreadTuple):
                     break
                 oobj.write(adapt(bits))
 
-        def writer(fd, iobj):
+        def defaultwriter(fd, iobj):
             from ..codecs.utf8 import utf8encode as adapt
             from os import close, write
 
@@ -70,6 +70,6 @@ class IOPump(ThreadTuple):
                 write(fd, adapt(chunk))
             close(fd)
 
-        yield from (Thread(target=reader, args=args) for args in rroutes)
-        yield from (Thread(target=writer, args=args) for args in wroutes)
+        yield from (Thread(target=defaultreader, args=args) for args in rroutes)
+        yield from (Thread(target=defaultwriter, args=args) for args in wroutes)
         yield from (Thread(target=y) for y in handlers)
