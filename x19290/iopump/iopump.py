@@ -19,6 +19,8 @@ class IOPump(ThreadTuple):
             else:
                 return True
 
+        handlers = tuple(y for y in routes if not isinstance(y, tuple))
+        routes = tuple(y for y in routes if isinstance(y, tuple))
         wroutes = tuple((fd, iobj) for fd, iobj in routes if not readable(fd))
         rroutes = tuple((fd, oobj) for fd, oobj in routes if readable(fd))
 
@@ -64,3 +66,5 @@ class IOPump(ThreadTuple):
 
         for fd, iobj in wroutes:
             yield Thread(target=writepump, args=(fd, iobj))
+
+        yield from (Thread(target=y) for y in handlers)
