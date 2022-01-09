@@ -12,7 +12,7 @@ class IOPump(ThreadTuple):
         from threading import Thread
 
         def defaultreader(fd, oobj):
-            from ..codecs.utf8 import utf8decode as adapt
+            from ..codecs.default import decode as adapt
             while True:
                 bits = read(fd, DEFAULT_BUFFER_SIZE)
                 if not bits:
@@ -29,7 +29,7 @@ class IOPump(ThreadTuple):
                 oobj.write(adapt(bits))
 
         def defaultwriter(fd, iobj):
-            from ..codecs.utf8 import utf8encode as adapt
+            from ..codecs.default import encode as adapt
             from os import close, write
 
             iobj = iobj.__iter__()

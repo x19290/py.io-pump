@@ -1,4 +1,3 @@
-from .utf8 import utf8decode, utf8encode
 from nose.tools import eq_
 from unittest import TestCase
 
@@ -8,8 +7,8 @@ _STR = r'©'
 class _Test:
     @classmethod
     def setUpClass(cls):
-        cls.bin = _STR.encode(cls.encoding)
-        cls.decode, cls.encode = map(staticmethod, cls.codecs)
+        cls.decode, cls.encode = map(staticmethod, (cls.decode, cls.encode))
+        cls.bin = _STR.encode(cls.ENCODING)
 
     def test0decode(self):
         expected = _STR
@@ -22,6 +21,5 @@ class _Test:
         eq_(expected, actual)
 
 
-class T0utf8(_Test, TestCase):
-    encoding = r'UTF-8'
-    codecs = utf8decode, utf8encode
+class T0(_Test, TestCase):
+    from .default import decode, encode, ENCODING

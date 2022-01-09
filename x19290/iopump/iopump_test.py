@@ -1,5 +1,5 @@
 from .iopump import IOPump
-from ..codecs.utf8 import utf8decode, utf8encode
+from ..codecs.default import decode as defaultdec, encode as defaultenc
 from io import BytesIO, StringIO
 from os import close, pipe, read, write
 from nose.tools import eq_
@@ -14,12 +14,13 @@ class T0(TestCase):
             try:
                 feed = r'01234', r"abcde"
                 if io is BytesIO:
-                    expected = tuple(utf8encode(y) for y in feed)
+                    from ..nop.identity import strictidentity
+                    expected = tuple(defaultenc(y) for y in feed)
                     feed = (tuple(bytes((c,)) for c in y) for y in expected)
                     feed = tuple(feed)
-                    decode = encode = lambda y: y
+                    decode = encode = strictidentity
                 else:
-                    decode, encode = utf8decode, utf8encode
+                    decode, encode = defaultdec, defaultenc
                     expected = feed
                 iobj0, iobj1 = map(tuple, feed)
                 oobj0, oobj1 = io(), io()
