@@ -29,5 +29,5 @@ class T0(TestCase):
 
                 yield from (Thread(target=y) for y in (prod, cons))
 
-        ProdCons().join()
+        ProdCons().start().join()
         eq_(expected, actual)

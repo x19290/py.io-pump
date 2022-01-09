@@ -44,7 +44,7 @@ class T0(TestCase):
                 IOPump(
                     makewriter(w0, iobj0), makewriter(w1, iobj1),
                     makereader(r0, oobj0), makereader(r1, oobj1),
-                ).join()
+                ).start().join()
             finally:
                 close(r1)
         finally:

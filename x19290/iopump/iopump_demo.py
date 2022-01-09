@@ -72,9 +72,8 @@ def iopump_demo(argv=None):
             # IOPump can hold any number of (this time only two) such threads
             pump = IOPump(reader0, writer0)
 
-            # These threads are already started.
-            # The following is possible
-            pump.join()  # IOPump.join() is inherited from ThureadTuple
+            # IOPump.start(), IOPump.join() is inherited from ThureadTuple
+            pump.start().join()
             return stdout.getvalue()
         finally:
             close(r)
